@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, scale
+
 
 
 # LOADING IN DATA
@@ -10,6 +12,7 @@ def load_split(filepath, feats):
     #     "VDepth", "NDVI_max", "NDVI_median", "NDVI_sd"]] # MAKE THIS AS AN INPUT TO THE FUNCTION TO CHOOSE WHICH PARAMS WE TRAIN WITH
     # Test with all variables of positive correlation:
     X_soc = soc[feats]
+    X_soc = scale(X_soc)
     y_soc = soc["SOC (%)"]
     X_train, X_test, y_train, y_test = train_test_split(X_soc, y_soc, test_size=0.2, random_state=0)
     # X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size = 0.2, random_state=0)
@@ -22,6 +25,7 @@ def load_split2(filepath, feats):
     #     "VDepth", "NDVI_max", "NDVI_median", "NDVI_sd"]] # MAKE THIS AS AN INPUT TO THE FUNCTION TO CHOOSE WHICH PARAMS WE TRAIN WITH
     # Test with all variables of positive correlation:
     X_soc = soc[feats]
+    X_soc = scale(X_soc)
     y_soc = soc["SOC (%)"]
     X_train, X_test, y_train, y_test = train_test_split(X_soc, y_soc, test_size=0.2, random_state=0)
     X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size = 0.2, random_state=0)
@@ -31,6 +35,7 @@ def creem_features(filepath):
     soc = pd.read_csv(filepath, header=0)
     y_soc = soc["SOC (%)"]
     X_soc = soc.drop(columns=["SampleID","SOC (%)", "Y (DD)", "X (DD)"], axis=1)
+    # X_soc = scale(X_soc)
     X_train, X_test, y_train, y_test = train_test_split(X_soc, y_soc, test_size=0.2, random_state=0)
     from sklearn.ensemble import RandomForestRegressor
     rf_creem = RandomForestRegressor(n_estimators=2500, random_state=0)

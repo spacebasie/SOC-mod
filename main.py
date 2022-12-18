@@ -19,8 +19,8 @@ def main():
     """PART 3 - VALIDATION TESTING TO FIND THE OPTIMAL PARAMETERS FOR EACH ALGORITHM"""
     # Fine-tuning with different parameters using the validation set to optimize each algo
     n_est, min_samp_spl, max_feats, max_dep, boot = RFreg_validate(X_train, y_train)
-    tol = linSVR_validate(X_tr, X_val, y_tr, y_val)
-    tole = SGDR_validate(X_tr, X_val, y_tr, y_val)
+    C_b, ker_b = linSVR_validate(X_tr, X_val, y_tr, y_val)
+    bloss, bpen = SGDR_validate(X_tr, X_val, y_tr, y_val)
     xgn_best, lossest, maxf, maxd, min_ssplit, min_sleaf = GBR_validate(X_train, y_train)
     n_best, lossestada = adaB_validate(X_train, y_train)
     exn_est, exmin_samp_spl, exmax_feats, exmax_dep, exboot = extra_validate(X_train, y_train)
@@ -38,8 +38,8 @@ def main():
     # Test algorithms again with the best parameters chosen from previous section to do a direct comparison
     # Test each algorithm and get its performance/errors
     rf_err = RFreg_test(X_train, X_test, y_train, y_test, n_est, min_samp_spl, max_feats, max_dep, boot)
-    linSVR_err = linSVR_test(X_tr, X_te, y_tr, y_te, tol)
-    sgdr_err = SGDR_test(X_tr, X_te, y_tr, y_te, tole)
+    linSVR_err = linSVR_test(X_tr, X_te, y_tr, y_te, C_b, ker_b)
+    sgdr_err = SGDR_test(X_tr, X_te, y_tr, y_te, bloss, bpen)
     gbr_err = GBR_test(X_train, X_test, y_train, y_test, xgn_best, lossest, maxf, maxd, min_ssplit, min_sleaf)
     ada_err = adaB_test(X_train, X_test, y_train, y_test, n_best, lossestada)
     extra_err = extra_test(X_train, X_test, y_train, y_test, exn_est, exmin_samp_spl, exmax_feats, exmax_dep, exboot)
